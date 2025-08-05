@@ -38,8 +38,8 @@ function M.config()
     everforest.setup({
         background = "medium",
         transparent_background_level = 0,
-        italics = true,
-        disable_italic_comments = false,
+        italics = false,
+        disable_italic_comments = true,
         inlay_hints_background = "dimmed",
         on_highlights = function(hl, _)
             hl["@string.special.symbol.ruby"] = { link = "@field" }

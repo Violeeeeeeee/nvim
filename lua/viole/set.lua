@@ -22,13 +22,6 @@ vim.o.relativenumber = true
 -- Enable break indent
 vim.o.breakindent = true
 
--- Save undo history
-vim.o.undofile = true
-
--- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
-vim.o.ignorecase = true
-vim.o.smartcase = true
-
 -- Keep signcolumn on by default
 vim.o.signcolumn = 'yes'
 
@@ -64,3 +57,13 @@ vim.opt.tabstop = 4        -- Number of spaces that a <Tab> character displays a
 vim.opt.softtabstop = 4    -- Number of spaces inserted when pressing <Tab>
 vim.opt.shiftwidth = 4     -- Number of spaces used for autoindent (>> or <<)
 vim.opt.expandtab = true   -- Convert tabs to spaces
+
+vim.opt.wrap = false             -- Disable line wrapping
+
+vim.opt.swapfile = false         -- Don't use swap files
+vim.opt.backup = false           -- Don't create backup files
+vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"  -- Set undo history directory
+vim.opt.undofile = true          -- Enable persistent undo (across sessions)
+
+vim.opt.hlsearch = false         -- Don't highlight all search matches
+vim.opt.incsearch = true -- Show matches while typing the search
