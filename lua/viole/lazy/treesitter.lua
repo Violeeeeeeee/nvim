@@ -7,7 +7,7 @@ return {
 
                 ensure_installed = { 'bash', 'c', 'diff', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'python' },
                 -- Install parsers synchronously (only applied to `ensure_installed`)
-                sync_install = false,
+                sync_install = true,
 
                 -- Automatically install missing parsers when entering buffer
                 -- Recommendation: set to false if you don"t have `tree-sitter` CLI installed locally
@@ -45,14 +45,11 @@ return {
 
                         keymaps = {
                             -- You can use the capture groups defined in textobjects.scm
-                            ["af"] = "@function.outer",
-                            ["if"] = "@function.inner",
-                            ["ac"] = "@class.outer",
-                            -- You can optionally set descriptions to the mappings (used in the desc parameter of
-                            -- nvim_buf_set_keymap) which plugins like which-key display
-                            ["ic"] = { query = "@class.inner", desc = "Select inner part of a class region" },
-                            -- You can also use captures from other query groups like `locals.scm`
-                            ["as"] = { query = "@local.scope", query_group = "locals", desc = "Select language scope" },
+                            ["sof"] = { query = "@function.outer", desc = "Select outer part of a function" },
+                            ["sif"] = { query = "@function.inner", desc = "Select inner part of a function" },
+                            ["soc"] = { query = "@class.outer", desc = "Select outer part of a class region" },
+                            ["sic"] = { query = "@class.inner", desc = "Select inner part of a class region" },
+                            ["sls"] = { query = "@local.scope", query_group = "locals", desc = "Select local scope" },
                         },
                         -- You can choose the select mode (default is charwise 'v')
                         --
