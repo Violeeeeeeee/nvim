@@ -13,7 +13,7 @@ return {
                 [vim.diagnostic.severity.HINT] = '󰌶 ',
             },
         } or {},
-        virtual_text = {
+        virtual_lines = {
             source = 'if_many',
             spacing = 2,
             format = function(diagnostic)
