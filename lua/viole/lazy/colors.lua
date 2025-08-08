@@ -25,8 +25,6 @@
 --
 --}
 
-
-
 local M = {
     "neanias/everforest-nvim",
     lazy = false,

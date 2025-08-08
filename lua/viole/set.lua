@@ -1,8 +1,8 @@
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
@@ -23,7 +23,7 @@ vim.o.relativenumber = true
 vim.o.breakindent = true
 
 -- Keep signcolumn on by default
-vim.o.signcolumn = 'yes'
+vim.o.signcolumn = "yes"
 
 -- Decrease update time
 vim.o.updatetime = 250
@@ -36,7 +36,7 @@ vim.o.splitright = true
 vim.o.splitbelow = true
 
 -- Preview substitutions live, as you type!
-vim.o.inccommand = 'split'
+vim.o.inccommand = "split"
 
 -- Show which line your cursor is on
 vim.o.cursorline = true
@@ -53,17 +53,17 @@ vim.o.confirm = true
 --  see `:help vim.keymap.set()`
 
 -- Tabs
-vim.opt.tabstop = 4        -- Number of spaces that a <Tab> character displays as
-vim.opt.softtabstop = 4    -- Number of spaces inserted when pressing <Tab>
-vim.opt.shiftwidth = 4     -- Number of spaces used for autoindent (>> or <<)
-vim.opt.expandtab = true   -- Convert tabs to spaces
+vim.opt.tabstop = 4 -- Number of spaces that a <Tab> character displays as
+vim.opt.softtabstop = 4 -- Number of spaces inserted when pressing <Tab>
+vim.opt.shiftwidth = 4 -- Number of spaces used for autoindent (>> or <<)
+vim.opt.expandtab = true -- Convert tabs to spaces
 
-vim.opt.wrap = false             -- Disable line wrapping
+vim.opt.wrap = false -- Disable line wrapping
 
-vim.opt.swapfile = false         -- Don't use swap files
-vim.opt.backup = false           -- Don't create backup files
-vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"  -- Set undo history directory
-vim.opt.undofile = true          -- Enable persistent undo (across sessions)
+vim.opt.swapfile = false -- Don't use swap files
+vim.opt.backup = false -- Don't create backup files
+vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir" -- Set undo history directory
+vim.opt.undofile = true -- Enable persistent undo (across sessions)
 
-vim.opt.hlsearch = false         -- Don't highlight all search matches
+vim.opt.hlsearch = false -- Don't highlight all search matches
 vim.opt.incsearch = true -- Show matches while typing the search
