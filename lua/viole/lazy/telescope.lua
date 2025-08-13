@@ -100,5 +100,10 @@ return {
         vim.keymap.set("n", "<leader>sn", function()
             builtin.find_files({ cwd = vim.fn.stdpath("config") })
         end, { desc = "[S]earch [N]eovim files" })
+
+        -- Shortcut for searching your dotfiles configuration files
+        vim.keymap.set("n", "<leader>sc", function()
+            builtin.find_files({ cwd = "$HOME/.config/bspwm" })
+        end, { desc = "[S]earch [C]onfig files" })
     end,
 }
