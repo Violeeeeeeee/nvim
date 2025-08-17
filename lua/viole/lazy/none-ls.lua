@@ -11,7 +11,6 @@ return {
                 "shfmt",
                 "stylua",
                 "spell",
-                "ruff",
             },
             automatic_installation = true,
         })
@@ -44,6 +43,6 @@ return {
             end,
         })
 
-        vim.keymap.set("n", "<Leader>gf", vim.lsp.buf.format, {})
+        -- vim.keymap.set("n", "<Leader>gf", vim.lsp.buf.format, {})
     end,
 }
