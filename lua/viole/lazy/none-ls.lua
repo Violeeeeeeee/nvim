@@ -11,6 +11,12 @@ return {
                 "shfmt",
                 "stylua",
                 "spell",
+                "black",
+                "debugpy",
+                "flake8",
+                "isort",
+                "mypy",
+                "pylint",
             },
             automatic_installation = true,
         })
@@ -19,11 +25,14 @@ return {
         local null_ls = require("null-ls")
         null_ls.setup({
             sources = {
-                require("none-ls.formatting.ruff").with({ extra_args = { "--extended-select", "I" } }),
-                require("none-ls.formatting.ruff_format"),
                 null_ls.builtins.formatting.prettier.with({ filetypes = { "json", "yaml", "markdown" } }),
                 null_ls.builtins.formatting.shfmt.with({ args = { "-i", "4" } }),
                 null_ls.builtins.formatting.stylua,
+                null_ls.builtins.formatting.black,
+                null_ls.builtins.formatting.isort,
+                null_ls.builtins.diagnostics.mypy.with({ ignore_missing_imports = true }),
+                null_ls.builtins.diagnostics.flake8,
+                null_ls.builtins.diagnostics.pylint,
                 null_ls.builtins.completion.spell,
             },
             -- you can reuse a shared lspconfig on_attach callback here

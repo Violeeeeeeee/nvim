@@ -42,10 +42,10 @@ return {
                 incremental_selection = {
                     enable = true,
                     keymaps = {
-                        init_selection = "<Leader>ns",
-                        node_incremental = "<Leader>ni",
-                        scope_incremental = "<Leader>nsi",
-                        node_decremental = "<Leader>nd",
+                        init_selection = "<leader>ns",
+                        node_incremental = "<leader>ni",
+                        scope_incremental = "<leader>nsi",
+                        node_decremental = "<leader>nd",
                     },
                 },
                 textobjects = {
