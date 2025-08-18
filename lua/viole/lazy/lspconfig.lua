@@ -67,7 +67,7 @@ return {
 
             local lsp = require("lspconfig")
             lsp.clangd.setup({})
-            lsp.lua_lsp.setup({
+            lsp.lua_ls.setup({
                 on_attach = on_attach,
                 capabilities = capabilities,
                 -- cmd = { ... },
