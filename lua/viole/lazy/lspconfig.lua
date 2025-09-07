@@ -66,6 +66,7 @@ return {
 			--            local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 			local lsp = require("lspconfig")
+			lsp.clangd.setup({})
 			lsp.lua_ls.setup({
 				on_attach = on_attach,
 				capabilities = capabilities,
@@ -82,11 +83,54 @@ return {
 					},
 				},
 			})
+			lsp.pyright.setup({
+				settings = {
+					pyright = {
+						-- Using other import organizer
+						disableOrganizeImports = true,
+					},
+					python = {
+						analysis = {
+							-- Ignore all files for analysis to exclusively use other instruments for linting
+							ignore = { "*" },
+						},
+					},
+				},
+			})
+			-- require("lspconfig").pylsp.setup({
+			--     cmd = { "pylsp" },
+			--     on_attach = on_attach,
+			--     capabilities = capabilities,
+			--     settings = {
+			--         pylsp = {
+			--             plugins = {
+			--                 pyflakes = { enabled = false },
+			--                 pycodestyle = { enabled = false },
+			--                 autopep8 = { enabled = false },
+			--                 yapf = { enabled = false },
+			--                 pylsp_mypy = { enabled = false },
+			--                 pylsp_black = { enabled = false },
+			--                 pylsp_isort = { enabled = false },
+			--                 mccabe = { enabled = false },
+			--                 pydocstyle = { enabled = false },
+			--                 flake8 = { enabled = false },
+			--                 pylint = { enabled = false },
+			--             },
+			--         },
+			--     },
+			-- })
+			--
 			local ensure_installed = vim.tbl_keys({})
 			vim.list_extend(ensure_installed, {
 				"prettier",
 				"shfmt",
 				"stylua",
+				"black",
+				"debugpy",
+				"flake8",
+				"isort",
+				"mypy",
+				"pylint",
 			})
 
 			-- Ensure the servers and tools above are installed
@@ -102,7 +146,9 @@ return {
 
 			require("mason-lspconfig").setup({
 				ensure_installed = {
+					"clangd",
 					"lua_ls",
+					"pyright",
 				},
 			})
 		end,
