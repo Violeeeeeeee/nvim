@@ -27,7 +27,7 @@ vim.o.signcolumn = "yes"
 
 -- Decrease update time
 vim.o.updatetime = 250
-
+vim.o.conceallevel = 0
 -- Decrease mapped sequence wait time
 vim.o.timeoutlen = 1000
 
@@ -53,17 +53,17 @@ vim.o.confirm = true
 --  see `:help vim.keymap.set()`
 
 -- Tabs
-vim.opt.tabstop = 4 -- Number of spaces that a <Tab> character displays as
-vim.opt.softtabstop = 4 -- Number of spaces inserted when pressing <Tab>
-vim.opt.shiftwidth = 4 -- Number of spaces used for autoindent (>> or <<)
-vim.opt.expandtab = true -- Convert tabs to spaces
+vim.opt.tabstop = 4                                    -- Number of spaces that a <Tab> character displays as
+vim.opt.softtabstop = 4                                -- Number of spaces inserted when pressing <Tab>
+vim.opt.shiftwidth = 4                                 -- Number of spaces used for autoindent (>> or <<)
+vim.opt.expandtab = true                               -- Convert tabs to spaces
 
-vim.opt.wrap = false -- Disable line wrapping
+vim.opt.wrap = false                                   -- Disable line wrapping
 
-vim.opt.swapfile = false -- Don't use swap files
-vim.opt.backup = false -- Don't create backup files
+vim.opt.swapfile = false                               -- Don't use swap files
+vim.opt.backup = false                                 -- Don't create backup files
 vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir" -- Set undo history directory
-vim.opt.undofile = true -- Enable persistent undo (across sessions)
+vim.opt.undofile = true                                -- Enable persistent undo (across sessions)
 
-vim.opt.hlsearch = false -- Don't highlight all search matches
-vim.opt.incsearch = true -- Show matches while typing the search
+vim.opt.hlsearch = false                               -- Don't highlight all search matches
+vim.opt.incsearch = true                               -- Show matches while typing the search

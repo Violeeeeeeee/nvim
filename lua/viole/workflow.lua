@@ -1,0 +1,39 @@
+--------------
+-- obsidian --
+--------------
+--
+-- >>> oo # from shell, navigate to vault (optional)
+--
+-- # NEW NOTE
+-- >>> on "Note Name" # call my "obsidian new note" shell script (~/bin/on)
+-- >>>
+-- >>> ))) <Leader>on # inside vim now, format note as template
+-- >>> ))) # add tag, e.g. fact / blog / video / etc..
+-- >>> ))) # add hubs, e.g. [[python]], [[machine-learning]], etc...
+-- >>> ))) <Leader>of # format title
+--
+-- # END OF DAY/WEEK REVIEW
+-- >>> or # review notes in inbox
+-- >>>
+-- >>> ))) <Leader>ok # inside vim now, move to zettelkasten
+-- >>> ))) <Leader>odd # or delete
+-- >>>
+-- >>> og # organize saved notes from zettelkasten into notes/[tag] folders
+-- >>> ou # sync local with Notion
+--
+-- navigate to vault
+-- vim.keymap.set("n", "<Leader>oo", "<cmd>cd $HOME/notes/cnn-research<CR>", { desc = "Obsidian: navigate to vault" })
+-- convert note to template and remove leading white space
+-- strip date from note title and replace dashes with spaces
+-- must have cursor on title
+-- vim.keymap.set("n", "<Leader>nf", ":s/\\(# \\)[^_]*_/\\1/ | s/-/ /g<cr>", { desc = "Obsidian: remove date from title" })
+
+-- search for files in notes (ignore zettelkasten)
+-- vim.keymap.set("n", "<Leader>ois", ":Telescope find_files search_dirs={\"/Users/alex/library/Mobile\\ Documents/iCloud~md~obsidian/Documents/ZazenCodes/notes\"}<cr>")
+-- vim.keymap.set("n", "<Leader>oiz", ":Telescope live_grep search_dirs={\"/Users/alex/library/Mobile\\ Documents/iCloud~md~obsidian/Documents/ZazenCodes/notes\"}<cr>")
+--
+-- for review workflow
+-- move file in current buffer to zettelkasten folder
+-- vim.keymap.set("n", "<Leader>ok", ":!mv '%:p' /Users/alex/library/Mobile\\ Documents/iCloud~md~obsidian/Documents/ZazenCodes/zettelkasten<cr>:bd<cr>")
+-- delete file in current buffer
+-- vim.keymap.set("n", "<Leader>odd", ":!rm '%:p'<cr>:bd<cr>")
