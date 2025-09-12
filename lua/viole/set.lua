@@ -58,7 +58,18 @@ vim.opt.softtabstop = 4                                -- Number of spaces inser
 vim.opt.shiftwidth = 4                                 -- Number of spaces used for autoindent (>> or <<)
 vim.opt.expandtab = true                               -- Convert tabs to spaces
 
-vim.opt.wrap = false                                   -- Disable line wrapping
+vim.opt.wrap = false
+vim.opt.linebreak = false
+  vim.api.nvim_create_autocmd("FileType", {
+    pattern = "markdown",
+    -- pattern = {"python", "javascript", "html"},
+    callback = function()
+      vim.opt_local.textwidth = 80
+        vim.opt_local.wrap = true
+        vim.opt_local.linebreak = true
+    end,
+  })
+-- vim.opt_local.linebreak = false
 
 vim.opt.swapfile = false                               -- Don't use swap files
 vim.opt.backup = false                                 -- Don't create backup files

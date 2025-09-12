@@ -50,10 +50,12 @@ return {
                         path = "~/notes/cnn-research",
                     },
                 },
-                notes_subdir = "notes",
+
+                notes_subdir = "inbox",
                 new_notes_location = "notes_subdir",
 
-                disable_frontmatter = false,
+                disable_frontmatter = true,
+
                 templates = {
                     subdir = "templates",
                     date_format = "%Y-%m-%d",
@@ -78,7 +80,7 @@ return {
                             suffix = suffix .. string.char(math.random(65, 90))
                         end
                     end
-                    return tostring(os.time()) .. "-" .. suffix
+                    return tostring(os.date("%Y-%m-%d")) .. "-" .. suffix
                 end,
 
                 -- -- Optional, customize how note file names are generated given the ID, target directory, and title.

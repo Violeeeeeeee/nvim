@@ -14,3 +14,10 @@ vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagn
 vim.keymap.set("n", "<leader>cd", function()
     vim.cmd("cd %:h/")
 end, { desc = "Change work directory" })
+
+
+-- for wrap lines
+vim.keymap.set({ "n", "o", "x" }, "j", "gj", {})
+vim.keymap.set({ "n", "o", "x" }, "k", "gk", {})
+vim.keymap.set({ "n", "o", "x" }, "H", "g0", {})
+vim.keymap.set({ "n", "o", "x" }, "L", "g$", {})
