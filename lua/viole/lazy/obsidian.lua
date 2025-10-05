@@ -116,6 +116,7 @@ return {
                 },
 
                 ui = { enable = false },
+                -- Specify how to handle attachments.
             })
         end,
     },
