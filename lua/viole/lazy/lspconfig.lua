@@ -8,6 +8,7 @@ return {
             "WhoIsSethDaniel/mason-tool-installer.nvim",
             { "j-hui/fidget.nvim",    opts = {} },
         },
+
         config = function()
             local on_attach = function(_, bufnr)
                 -- NOTE: Remember that Lua is a real programming language, and as such it is possible
@@ -65,6 +66,7 @@ return {
             end
             --            local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
+
             local lsp = require("lspconfig")
             lsp.clangd.setup({})
             lsp.lua_ls.setup({
@@ -83,7 +85,31 @@ return {
                     },
                 },
             })
-            -- lsp.ruff.setup({})
+            lsp.ruff.setup({
+                init_options = {
+                    settings = {
+                        configurationPreference = "filesystemFirst",
+
+                        lineLength = 120,  -- Line length to pass to ruff checking and formatting
+                        exclude = { "__about__.py", ".venv" },  -- Files to be excluded by ruff checking
+                        ignore = { "D210" },  -- Rules to be ignored by ruff
+                        perFileIgnores = { ["__init__.py"] = "CPY001" },  -- Rules that should be ignored for specific files
+                        organizeImports = true,
+                        showSyntaxErrors = true,
+                        lint = {
+                            enable = true,
+                            select = { "F" },  -- Rules to be enabled by ruff
+                            unfixable = {"F401"},
+                            extendSelect = {"TID251"},
+                        },
+                        format = {
+                            backend = "internal",
+                        }
+                    }
+
+                },
+            })
+
             -- lsp.pyright.setup({
             --     settings = {
             --         pyright = {
@@ -129,28 +155,29 @@ return {
                             jedi_signature_help = { enabled = true },
                             jedi_symbols = { enabled = true },
 
-                            -- linting/formatting via ruff
-                            ruff = {
-                                enabled = true,
-                                formatEnabled = true,  -- Enable formatting using ruffs formatter
-                                -- executable = "<path-to-ruff-bin>",  -- Custom path to ruff
-                                -- config = "<path_to_custom_ruff_toml>",  -- Custom config for ruff to use
-                                extendSelect = { "I" },  -- Rules that are additionally used by ruff
-                                extendIgnore = { "C90" },  -- Rules that are additionally ignored by ruff
-                                format = { "I" },  -- Rules that are marked as fixable by ruff that should be fixed when running textDocument/formatting
-                                severities = { ["D212"] = "I" },  -- Optional table of rules where a custom severity is desired
-                                unsafeFixes = false,  -- Whether or not to offer unsafe fixes as code actions. Ignored with the "Fix All" action
-                                unfixable = { "F401" }, -- Rules that are excluded when checking the code actions (including the "Fix All" action)
-
-                                -- Rules that are ignored when a pyproject.toml or ruff.toml is present:
-                                lineLength = 88,  -- Line length to pass to ruff checking and formatting
-                                exclude = { "__about__.py" },  -- Files to be excluded by ruff checking
-                                select = { "F" },  -- Rules to be enabled by ruff
-                                ignore = { "D210" },  -- Rules to be ignored by ruff
-                                perFileIgnores = { ["__init__.py"] = "CPY001" },  -- Rules that should be ignored for specific files
-                                preview = false,  -- Whether to enable the preview style linting and formatting.
-                                targetVersion = "py310",  -- The minimum python version to target (applies for both linting and formatting).
-                            },
+                            -- -- linting/formatting via ruff
+                            -- pylsp_ruff = {
+                            --     enabled = true,
+                            --     configurationPreference = "editorFirst",
+                            --     formatEnabled = true,  -- Enable formatting using ruffs formatter
+                            --     -- executable = "<path-to-ruff-bin>",  -- Custom path to ruff
+                            --     -- config = "<path_to_custom_ruff_toml>",  -- Custom config for ruff to use
+                            --     extendSelect = { "I" },  -- Rules that are additionally used by ruff
+                            --     extendIgnore = { "C90" },  -- Rules that are additionally ignored by ruff
+                            --     format = { "I" },  -- Rules that are marked as fixable by ruff that should be fixed when running textDocument/formatting
+                            --     severities = { ["D212"] = "I" },  -- Optional table of rules where a custom severity is desired
+                            --     unsafeFixes = false,  -- Whether or not to offer unsafe fixes as code actions. Ignored with the "Fix All" action
+                            --     unfixable = { "F401" }, -- Rules that are excluded when checking the code actions (including the "Fix All" action)
+                            --
+                            --     -- Rules that are ignored when a pyproject.toml or ruff.toml is present:
+                            --     lineLength = 120,  -- Line length to pass to ruff checking and formatting
+                            --     exclude = { "__about__.py" },  -- Files to be excluded by ruff checking
+                            --     select = { "F" },  -- Rules to be enabled by ruff
+                            --     ignore = { "D210" },  -- Rules to be ignored by ruff
+                            --     perFileIgnores = { ["__init__.py"] = "CPY001" },  -- Rules that should be ignored for specific files
+                            --     preview = false,  -- Whether to enable the preview style linting and formatting.
+                            --     targetVersion = "py310",  -- The minimum python version to target (applies for both linting and formatting).
+                            -- },
                         },
                     },
                 },
@@ -184,7 +211,8 @@ return {
                 ensure_installed = {
                     "clangd",
                     "lua_ls",
-                    -- "ruff",
+                    "pylsp",
+                    "ruff",
                     -- "pyright",
                 },
             })

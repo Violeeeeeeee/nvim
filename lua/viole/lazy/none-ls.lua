@@ -17,7 +17,7 @@ return {
                 -- "flake8",
                 -- "mypy",
                 -- "pylint",
-                -- "ruff",
+                "ruff",
             },
             automatic_installation = true,
         })
@@ -28,6 +28,7 @@ return {
                 null_ls.builtins.formatting.prettier,
                 null_ls.builtins.formatting.shfmt.with({ args = { "-i", "4" } }),
                 null_ls.builtins.formatting.stylua,
+                require("none-ls.formatting.ruff"),
                 -- null_ls.builtins.formatting.black,
                 -- null_ls.builtins.formatting.isort,
                 -- null_ls.builtins.diagnostics.mypy.with({
@@ -74,5 +75,5 @@ return {
             },
         })
     end,
-    -- vim.keymap.set("n", "<Leader>gf", vim.lsp.buf.format, {})
+    vim.keymap.set("n", "<Leader>gf", vim.lsp.buf.format, {})
 }
