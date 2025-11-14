@@ -35,7 +35,7 @@ function M.config()
     local everforest = require("everforest")
     everforest.setup({
         background = "soft",
-        transparent_background_level = 0,
+        transparent_background_level = 1,
         italics = false,
         disable_italic_comments = true,
         inlay_hints_background = "dimmed",
