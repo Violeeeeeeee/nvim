@@ -14,6 +14,7 @@ return {
                     "markdown",
                     "markdown_inline",
                     "query",
+                    "yaml",
                     "vim",
                     "vimdoc",
                     "python",
