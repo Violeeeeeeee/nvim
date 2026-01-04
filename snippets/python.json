@@ -1,0 +1,26 @@
+{
+  "import torch": {
+    "prefix": "tr",
+    "body": ["import torch"]
+  },
+  "import numpy": {
+    "prefix": "np",
+    "body": ["import numpy as np"]
+  },
+  "import pandas": {
+    "prefix": "pd",
+    "body": ["import pandas as pd"]
+  },
+  "import matplotlib": {
+    "prefix": "plt",
+    "body": ["import matplotlib.pyplot as plt"]
+  },
+  "matplotlib plot": {
+    "prefix": "plot",
+    "body": [
+      "plt.figure(figsize=(${1:10}, ${2:6}))",
+      "plt.plot(${3:x}, ${4:y})",
+      "plt.show()"
+    ]
+  }
+}

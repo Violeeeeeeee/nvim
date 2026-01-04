@@ -1,0 +1,18 @@
+{
+  "Python Chunk": {
+    "prefix": "py",
+    "body": [
+      "```{python}",
+      "$0",
+      "```"
+    ]
+  },
+  "Bash Chunk": {
+    "prefix": "bash",
+    "body": [
+      "```{bash}",
+      "$0",
+      "```"
+    ]
+  }
+}
