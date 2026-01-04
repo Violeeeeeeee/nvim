@@ -29,31 +29,19 @@ return {
         config = function(_, opts)
             require('quarto').setup(opts)
 
-            -- Налаштування запуску (Runner)
             local runner = require("quarto.runner")
 
-            -- === КЛАВІШІ (KEYMAPS) ===
-
-            -- Ctrl + Enter: Запустити клітинку
             vim.keymap.set("n", "<C-CR>", runner.run_cell, { desc = "Run Cell", silent = true })
             vim.keymap.set("i", "<C-CR>", runner.run_cell, { desc = "Run Cell", silent = true })
-
-            -- Shift + Enter: Запустити і перейти далі
             vim.keymap.set("n", "<S-CR>", function()
                 runner.run_cell()
             end, { desc = "Run Cell and Step", silent = true })
-
-            -- Leader + rc (Run Cell), Leader + ra (Run All)
             vim.keymap.set("n", "<leader>rc", runner.run_cell, { desc = "[R]un [C]ell" })
             vim.keymap.set("n", "<leader>ra", runner.run_all, { desc = "[R]un [A]ll" })
-
-            -- Leader + ip: Відкрити термінал IPython (справа)
             vim.keymap.set("n", "<leader>ip", function()
-                -- Відкриваємо IPython, бо він краще працює з блоками коду ніж звичайний python
                 vim.cmd("vsplit term://ipython --no-confirm-exit")
                 vim.cmd("wincmd p") -- повернутися назад у код
             end, { desc = "[I]nit [P]ython Terminal" })
-
             -- Leader + qp: Відкрити прев'ю документа (в браузері)
             vim.keymap.set("n", "<leader>qp", require('quarto').quartoPreview, { desc = "[Q]uarto [P]review" })
         end
@@ -76,19 +64,14 @@ return {
         'jpalardy/vim-slime',
         dev = false,
         init = function()
-            -- ВАЖЛИВО: Налаштування змінних ДО завантаження плагіна (init)
             vim.g.slime_target = 'neovim'
             vim.g.slime_no_mappings = true
-            vim.g.slime_python_ipython = 1 -- Вмикаємо режим IPython для коректної вставки
-
-            -- Змінні, які раніше викликали помилку, тепер тут:
+            vim.g.slime_python_ipython = 1
             vim.g.slime_input_pid = false
             vim.g.slime_suggest_default = true
             vim.g.slime_menu_config = false
             vim.g.slime_neovim_ignore_unlisted = true
-
             vim.b['quarto_is_python_chunk'] = false
-            -- Функція для визначення мови поточного блоку (для otter/slime)
             Quarto_is_in_python_chunk = function()
                 require('otter.tools.functions').is_otter_language_context 'python'
             end
@@ -119,7 +102,47 @@ return {
             vim.keymap.set('n', '<leader>cs', set_terminal, { desc = '[s]et terminal' })
         end,
     },
+    { -- Nabla (LaTeX формули)
+        'jbyuki/nabla.nvim',
+        keys = {
+            { '<leader>qm', ':lua require"nabla".toggle_virt()<cr>', desc = 'Toggle [M]ath' },
+        },
+    },
 
+    { -- Molten (Jupyter Kernels + Images)
+        'benlubas/molten-nvim',
+        version = "^1.0.0",
+        build = ":UpdateRemotePlugins",
+        dependencies = {
+            "3rd/image.nvim", -- Для картинок
+        },
+        init = function()
+            vim.g.molten_image_provider = "image.nvim"
+            vim.g.molten_auto_open_output = false -- Краще відкривати вручну, щоб не заважало
+            vim.g.molten_output_win_max_height = 20
+        end,
+        keys = {
+            { "<leader>mi", ":MoltenInit<cr>", desc = "[M]olten [I]nit" },
+            { "<leader>me", ":MoltenEvaluateOperator<cr>", desc = "[M]olten [E]valuate" },
+            { "<leader>rr", ":MoltenEvaluateLine<cr>", desc = "[R]un Line (Molten)" },
+            { "<leader>rc", ":MoltenReevaluateCell<cr>", desc = "[R]e-run [C]ell (Molten)" },
+            { "<leader>md", ":MoltenDelete<cr>", desc = "[M]olten [D]elete cell" },
+            { "<leader>mh", ":MoltenHideOutput<cr>", desc = "[M]olten [H]ide" },
+            { "<leader>mo", ":noautocmd MoltenEnterOutput<cr>", desc = "[M]olten [O]utput Enter" },
+        },
+    },
+
+    { -- Image.nvim (потрібен для Molten)
+        "3rd/image.nvim",
+        opts = {
+            backend = "kitty", -- Або "ueberzug" якщо термінал не підтримує kitty protocol
+            max_width = 100,
+            max_height = 12,
+            max_width_window_percentage = math.huge,
+            max_height_window_percentage = math.huge,
+            window_overlap_clear_enabled = true,
+        }
+    },
     { -- Вставка картинок з буфера обміну
         'HakonHarnes/img-clip.nvim',
         event = 'BufEnter',
