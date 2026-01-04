@@ -1,43 +1,35 @@
 return {
     {
         "nvim-treesitter/nvim-treesitter",
-        build = ":TSUpdate",
-        lazy = false,
-        dependencies = {
-            {
-                "nvim-treesitter/nvim-treesitter-textobjects",
-            },
-        },
+        branch = 'master',
         config = function()
-            ---@diagnostic disable-next-line: missing-fields
-            require('nvim-treesitter.configs').setup({
+            require("nvim-treesitter.configs").setup({
+                -- A list of parser names, or "all"
+
                 ensure_installed = {
-                  'bash',
-                  'c',
-                  'diff',
-                  'lua',
-                  'luadoc',
-                  'markdown',
-                  'markdown_inline',
-                  'query',
-                  'yaml',
-                  'vim',
-                  'vimdoc',
-                  'python',
-                  -- 'julia',
-                  -- 'latex', -- requires tree-sitter-cli (installed automatically via Mason)
-                  -- 'mermaid',
+                    "bash",
+                    "c",
+                    "diff",
+                    "lua",
+                    "luadoc",
+                    "markdown",
+                    "markdown_inline",
+                    "query",
+                    "vim",
+                    "vimdoc",
+                    "python",
                 },
                 -- Install parsers synchronously (only applied to `ensure_installed`)
-                sync_install = false,
+                sync_install = true,
 
                 -- Automatically install missing parsers when entering buffer
                 -- Recommendation: set to false if you don"t have `tree-sitter` CLI installed locally
                 auto_install = true,
 
                 indent = {
-                  enable = true,
+                    enable = true,
                 },
+
                 highlight = {
                     -- `false` will disable the whole extension
                     enable = true,
@@ -46,8 +38,7 @@ return {
                     -- Set this to `true` if you depend on "syntax" being enabled (like for indentation).
                     -- Using this option may slow down your editor, and you may see some duplicate highlights.
                     -- Instead of true it can also be a list of languages
-                    -- additional_vim_regex_highlighting = { "markdown" },
-                    additional_vim_regex_highlighting = false,
+                    additional_vim_regex_highlighting = { "markdown" },
                 },
                 incremental_selection = {
                     enable = true,
@@ -58,7 +49,6 @@ return {
                         node_decremental = "<leader>nd",
                     },
                 },
-
                 textobjects = {
                     select = {
                         enable = true,
@@ -68,13 +58,12 @@ return {
 
                         keymaps = {
                             -- You can use the capture groups defined in textobjects.scm
-                            ['af'] = { query = "@function.outer", desc = "Select outer part of a function" },
-                            ['if'] = { query = "@function.inner", desc = "Select inner part of a function" },
-                            ['ac'] = { query = "@class.outer", desc = "Select outer part of a class region" },
-                            ['ic'] = { query = "@class.inner", desc = "Select inner part of a class region" },
-                            ["ls"] = { query = "@local.scope", query_group = "locals", desc = "Select local scope" },
+                            ["sof"] = { query = "@function.outer", desc = "Select outer part of a function" },
+                            ["sif"] = { query = "@function.inner", desc = "Select inner part of a function" },
+                            ["soc"] = { query = "@class.outer", desc = "Select outer part of a class region" },
+                            ["sic"] = { query = "@class.inner", desc = "Select inner part of a class region" },
+                            ["sls"] = { query = "@local.scope", query_group = "locals", desc = "Select local scope" },
                         },
-
                         -- You can choose the select mode (default is charwise 'v')
                         --
                         -- Can also be a function which gets passed a table with the keys
@@ -98,31 +87,11 @@ return {
                         -- and should return true or false
                         include_surrounding_whitespace = true,
                     },
-                    -- Fixed: Moved 'move' table INSIDE 'textobjects' table
-                    move = {
-                        enable = true,
-                        set_jumps = true, -- whether to set jumps in the jumplist
-                        goto_next_start = {
-                            [']m'] = '@function.outer',
-                            [']]'] = '@class.inner',
-                        },
-                        goto_next_end = {
-                            [']M'] = '@function.outer',
-                            [']['] = '@class.outer',
-                        },
-                        goto_previous_start = {
-                            ['[m'] = '@function.outer',
-                            ['[['] = '@class.inner',
-                        },
-                        goto_previous_end = {
-                            ['[M'] = '@function.outer',
-                            ['[]'] = '@class.outer',
-                        },
-                    },
                 },
             })
         end,
     },
+
     {
         "nvim-treesitter/nvim-treesitter-context",
         after = "nvim-treesitter",
@@ -133,7 +102,7 @@ return {
                 max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.
                 min_window_height = 0, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
                 line_numbers = true,
-                multiline_threshold = 10, -- Maximum number of lines to show for a single context
+                multiline_threshold = 20, -- Maximum number of lines to show for a single context
                 trim_scope = "outer", -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
                 mode = "cursor", -- Line used to calculate context. Choices: 'cursor', 'topline'
                 -- Separator between context and content. Should be a single character string, like '-'.
@@ -143,5 +112,9 @@ return {
                 on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching
             })
         end,
+    },
+    {
+        "nvim-treesitter/nvim-treesitter-textobjects",
+        branch = 'master',
     },
 }
