@@ -60,14 +60,15 @@ return {
                 map("<leader>gtd", require("telescope.builtin").lsp_type_definitions, "[G]oto [T]ype [D]efinition")
             end
 
-            local capabilities = nil
-            if pcall(require, "cmp_nvim_lsp") then
-                capabilities = require("cmp_nvim_lsp").default_capabilities()
+            local capabilities
+            local has_blink, blink = pcall(require, 'blink')
+            if has_blink then
+              capabilities = blink.get_lsp_capabilities({}, true)
+            else
+              capabilities = vim.lsp.protocol.make_client_capabilities()
             end
-            --            local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-
-            local lsp = require("lspconfig")
+            local lsp = vim.lsp.config
             lsp.clangd.setup({})
             lsp.lua_ls.setup({
                 on_attach = on_attach,
@@ -124,7 +125,7 @@ return {
             --         },
             --     },
             -- })
-            require("lspconfig").pylsp.setup({
+            vim.lsp.config.pylsp.setup({
                 -- cmd = { "pylsp" },
                 -- logs for debugging
                 cmd = {"pylsp", "-vvv", "--log-file", "/tmp/lsp.log"},
