@@ -1,9 +1,8 @@
 return {
-
     {
         "neovim/nvim-lspconfig",
         dependencies = {
-            { "mason-org/mason.nvim", config = true }, -- Auto-setup mason
+            { "mason-org/mason.nvim", config = true },
             "mason-org/mason-lspconfig.nvim",
             "WhoIsSethDaniel/mason-tool-installer.nvim",
             { "j-hui/fidget.nvim", opts = {} },
@@ -13,17 +12,12 @@ return {
             local original_capabilities = vim.lsp.protocol.make_client_capabilities()
             local capabilities = require("blink.cmp").get_lsp_capabilities(original_capabilities)
             local on_attach = function(_, bufnr)
-                -- NOTE: Remember that Lua is a real programming language, and as such it is possible
-                -- to define small helper and utility functions so you don't have to repeat yourself.
-                --
-                -- In this case, we create a function that lets us more easily define mappings specific
-                -- for LSP related items. It sets the mode, buffer and description for us each time.
                 local map = function(keys, func, desc, mode)
                     mode = mode or "n"
                     vim.keymap.set(mode, keys, func, { buffer = bufnr, desc = "LSP: " .. desc })
                 end
-
                 map("K", vim.lsp.buf.hover, "Hover")
+
                 -- Rename the variable under your cursor.
                 --  Most Language Servers support renaming across files, etc.
                 map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
@@ -62,23 +56,6 @@ return {
                 map("<leader>gtd", require("telescope.builtin").lsp_type_definitions, "[G]oto [T]ype [D]efinition")
             end
 
-            -- local capabilities
-            -- local has_blink, blink = pcall(require, 'blink')
-            -- if has_blink then
-            --   capabilities = blink.get_lsp_capabilities({}, true)
-            -- else
-            --   capabilities = vim.lsp.protocol.make_client_capabilities()
-            -- end
-            -- local capabilities = require('blink.cmp').get_lsp_capabilities()
-
-
-            -- LSP servers and clients are able to communicate to each other what features they support.
-            --  By default, Neovim doesn't support everything that is in the LSP specification.
-            --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
-            --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
-            -- capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
-            local original_capabilities = vim.lsp.protocol.make_client_capabilities()
-            local capabilities = require("blink.cmp").get_lsp_capabilities(original_capabilities)
 
             -- Enable the following language servers
             --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -90,7 +67,6 @@ return {
             --  - settings (table): Override the default settings passed when initializing the server.
             --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
             local servers = {
-
                 clangd = {
                     on_attach = on_attach,
                     capabilities = capabilities,
@@ -98,16 +74,10 @@ return {
                 lua_ls = {
                     on_attach = on_attach,
                     capabilities = capabilities,
-                    -- cmd = { ... },
-                    -- filetypes = { ... },
-                    -- capabilities = {},
                     settings = {
-
                         Lua = {
                             completion = { callSnippet = "Replace" },
                             diagnostics = { globals = { "vim" } },
-                            -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-                            -- diagnostics = { disable = { 'missing-fields' } },
                         },
                     },
                 },
@@ -117,7 +87,6 @@ return {
                     init_options = {
                         settings = {
                             configurationPreference = "filesystemFirst",
-
                             lineLength = 120,  -- Line length to pass to ruff checking and formatting exclude = { "__about__.py", ".venv" },  -- Files to be excluded by ruff checking ignore = { "D210" },  -- Rules to be ignored by ruff
                             perFileIgnores = { ["__init__.py"] = "CPY001" },  -- Rules that should be ignored for specific files
                             organizeImports = true,
@@ -130,9 +99,8 @@ return {
                             },
                             format = {
                                 backend = "internal",
-                            }
-                        }
-
+                            },
+                        },
                     },
                 },
                 -- pyright = {
@@ -170,7 +138,6 @@ return {
                                 pydocstyle = { enabled = false },
                                 flake8 = { enabled = false },
                                 pylint = { enabled = false },
-
                                 -- Keep navigation-related plugins enabled
                                 rope_completion = { enabled = true },
                                 jedi_completion = { enabled = true },
@@ -179,7 +146,6 @@ return {
                                 jedi_references = { enabled = true },
                                 jedi_signature_help = { enabled = true },
                                 jedi_symbols = { enabled = true },
-
                                 -- -- linting/formatting via ruff
                                 -- pylsp_ruff = {
                                 --     enabled = true,
@@ -193,7 +159,6 @@ return {
                                 --     severities = { ["D212"] = "I" },  -- Optional table of rules where a custom severity is desired
                                 --     unsafeFixes = false,  -- Whether or not to offer unsafe fixes as code actions. Ignored with the "Fix All" action
                                 --     unfixable = { "F401" }, -- Rules that are excluded when checking the code actions (including the "Fix All" action)
-                                --
                                 --     -- Rules that are ignored when a pyproject.toml or ruff.toml is present:
                                 --     lineLength = 120,  -- Line length to pass to ruff checking and formatting
                                 --     exclude = { "__about__.py" },  -- Files to be excluded by ruff checking
@@ -209,11 +174,10 @@ return {
                 },
             }
 
-            -- require("mason").setup()
+            require("mason").setup()
 
-            local ensure_installed = vim.tbl_keys({})
+            local ensure_installed = vim.tbl_keys(servers or {})
             vim.list_extend(ensure_installed, {
-                "prettier",
                 "shfmt",
                 "stylua",
                 "debugpy",
@@ -224,30 +188,7 @@ return {
                 -- "pylint",
             })
 
-            -- Ensure the servers and tools above are installed
-            --
-            -- To check the current status of installed tools and/or manually install
-            -- other tools, you can run
-            --    :Mason
-            --
-            -- You can press `g?` for help in this menu.
-            --
-            -- `mason` had to be setup earlier: to configure its options see the
-            -- `dependencies` table for `nvim-lspconfig` above.
-            --
-            -- You can add other tools here that you want Mason to install
-            -- for you, so that they are available from within Neovim.
             require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
-
-            -- require("mason-lspconfig").setup({
-            --     ensure_installed = {
-            --         "clangd",
-            --         "lua_ls",
-            --         "pylsp",
-            --         "ruff",
-            --         -- "pyright",
-            --     },
-            -- })
 
             require("mason-lspconfig").setup({
                 ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
@@ -255,11 +196,24 @@ return {
                 handlers = {
                     function(server_name)
                         local server = servers[server_name] or {}
-                        -- This handles overriding only values explicitly passed
-                        -- by the server configuration above. Useful when disabling
-                        -- certain features of an LSP (for example, turning off formatting for ts_ls)
                         server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-                        require("lspconfig")[server_name].setup(server)
+                        server.on_attach = on_attach
+
+                        -- NVIM 0.11 / DEPRECATION FIX
+                        local lspconfig = require("lspconfig")
+
+                        if lspconfig[server_name] then
+                            lspconfig[server_name].setup(server)
+                        else
+                            -- Якщо Mason дав назву, яку lspconfig не знає (рідкісний випадок),
+                            -- або якщо ми на чистому 0.11 без плагіна lspconfig (майбутнє)
+                            if vim.fn.has("nvim-0.11") == 1 then
+                                vim.lsp.config[server_name] = server
+                                vim.lsp.enable(server_name)
+                            else
+                                vim.notify("LSP: Server " .. server_name .. " cannot be setup (not found in lspconfig)", vim.log.levels.WARN)
+                            end
+                        end
                     end,
                 },
             })
