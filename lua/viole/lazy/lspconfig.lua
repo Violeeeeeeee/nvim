@@ -1,5 +1,17 @@
 return {
     {
+        'jmbuhr/otter.nvim',
+        dev = false,
+        dependencies = {
+            {
+                'neovim/nvim-lspconfig',
+                'nvim-treesitter/nvim-treesitter',
+            },
+        },
+        ---@type OtterConfig
+        opts = {},
+    },
+    {
         "neovim/nvim-lspconfig",
         dependencies = {
             { "mason-org/mason.nvim", config = true },
@@ -103,75 +115,75 @@ return {
                         },
                     },
                 },
-                -- pyright = {
-                --     settings = {
-                --         pyright = {
-                --             -- Using other import organizer
-                --             disableOrganizeImports = true,
-                --         },
-                --         python = {
-                --             analysis = {
-                --                 -- Ignore all files for analysis to exclusively use other instruments for linting
-                --                 ignore = { "*" },
-                --             },
-                --         },
-                --     },
-                -- },
-                pylsp = {
-                    -- cmd = { "pylsp" },
-                    -- logs for debugging
-                    cmd = {"pylsp", "-vvv", "--log-file", "/tmp/lsp.log"},
-                    on_attach = on_attach,
-                    capabilities = capabilities,
+                pyright = {
                     settings = {
-                        pylsp = {
-                            plugins = {
-                                -- Disabling all formatting and linting tools
-                                pyflakes = { enabled = false },
-                                pycodestyle = { enabled = false },
-                                autopep8 = { enabled = false },
-                                yapf = { enabled = false },
-                                pylsp_mypy = { enabled = false },
-                                pylsp_black = { enabled = false },
-                                pylsp_isort = { enabled = false },
-                                mccabe = { enabled = false },
-                                pydocstyle = { enabled = false },
-                                flake8 = { enabled = false },
-                                pylint = { enabled = false },
-                                -- Keep navigation-related plugins enabled
-                                rope_completion = { enabled = true },
-                                jedi_completion = { enabled = true },
-                                jedi_definition = { enabled = true },
-                                jedi_hover = { enabled = true },
-                                jedi_references = { enabled = true },
-                                jedi_signature_help = { enabled = true },
-                                jedi_symbols = { enabled = true },
-                                -- -- linting/formatting via ruff
-                                -- pylsp_ruff = {
-                                --     enabled = true,
-                                --     configurationPreference = "editorFirst",
-                                --     formatEnabled = true,  -- Enable formatting using ruffs formatter
-                                --     -- executable = "<path-to-ruff-bin>",  -- Custom path to ruff
-                                --     -- config = "<path_to_custom_ruff_toml>",  -- Custom config for ruff to use
-                                --     extendSelect = { "I" },  -- Rules that are additionally used by ruff
-                                --     extendIgnore = { "C90" },  -- Rules that are additionally ignored by ruff
-                                --     format = { "I" },  -- Rules that are marked as fixable by ruff that should be fixed when running textDocument/formatting
-                                --     severities = { ["D212"] = "I" },  -- Optional table of rules where a custom severity is desired
-                                --     unsafeFixes = false,  -- Whether or not to offer unsafe fixes as code actions. Ignored with the "Fix All" action
-                                --     unfixable = { "F401" }, -- Rules that are excluded when checking the code actions (including the "Fix All" action)
-                                --     -- Rules that are ignored when a pyproject.toml or ruff.toml is present:
-                                --     lineLength = 120,  -- Line length to pass to ruff checking and formatting
-                                --     exclude = { "__about__.py" },  -- Files to be excluded by ruff checking
-                                --     select = { "F" },  -- Rules to be enabled by ruff
-                                --     ignore = { "D210" },  -- Rules to be ignored by ruff
-                                --     perFileIgnores = { ["__init__.py"] = "CPY001" },  -- Rules that should be ignored for specific files
-                                --     preview = false,  -- Whether to enable the preview style linting and formatting.
-                                --     targetVersion = "py310",  -- The minimum python version to target (applies for both linting and formatting).
-                                -- },
+                        pyright = {
+                            -- Using other import organizer
+                            disableOrganizeImports = true,
+                        },
+                        python = {
+                            analysis = {
+                                -- Ignore all files for analysis to exclusively use other instruments for linting
+                                ignore = { "*" },
                             },
                         },
                     },
                 },
+                -- pylsp = {
+                --     -- cmd = { "pylsp" },
+                --     -- logs for debugging
+                --     cmd = {"pylsp", "-vvv", "--log-file", "/tmp/lsp.log"},
+                --     on_attach = on_attach,
+                --     capabilities = capabilities,
+                --     settings = {
+                --         pylsp = {
+                --             plugins = {
+                --                 -- Disabling all formatting and linting tools
+                --                 pyflakes = { enabled = false },
+                --                 pycodestyle = { enabled = false },
+                --                 autopep8 = { enabled = false },
+                --                 yapf = { enabled = false },
+                --                 pylsp_mypy = { enabled = false },
+                --                 pylsp_black = { enabled = false },
+                --                 pylsp_isort = { enabled = false },
+                --                 mccabe = { enabled = false },
+                --                 pydocstyle = { enabled = false },
+                --                 flake8 = { enabled = false },
+                --                 pylint = { enabled = false },
+                --                 -- Keep navigation-related plugins enabled
+                --                 rope_completion = { enabled = true },
+                --                 jedi_completion = { enabled = true },
+                --                 jedi_definition = { enabled = true },
+                --                 jedi_hover = { enabled = true },
+                --                 jedi_references = { enabled = true },
+                --                 jedi_signature_help = { enabled = true },
+                --                 jedi_symbols = { enabled = true },
+                --                 -- -- linting/formatting via ruff
+                --                 -- pylsp_ruff = {
+                --                 --     enabled = true,
+                --                 --     configurationPreference = "editorFirst",
+                --                 --     formatEnabled = true,  -- Enable formatting using ruffs formatter
+                --                 --     -- executable = "<path-to-ruff-bin>",  -- Custom path to ruff
+                --                 --     -- config = "<path_to_custom_ruff_toml>",  -- Custom config for ruff to use
+                --                 --     extendSelect = { "I" },  -- Rules that are additionally used by ruff
+                --                 --     extendIgnore = { "C90" },  -- Rules that are additionally ignored by ruff
+                --                 --     format = { "I" },  -- Rules that are marked as fixable by ruff that should be fixed when running textDocument/formatting
+                --                 --     severities = { ["D212"] = "I" },  -- Optional table of rules where a custom severity is desired
+                --                 --     unsafeFixes = false,  -- Whether or not to offer unsafe fixes as code actions. Ignored with the "Fix All" action
+                --                 --     unfixable = { "F401" }, -- Rules that are excluded when checking the code actions (including the "Fix All" action)
+                --                 --     -- Rules that are ignored when a pyproject.toml or ruff.toml is present:
+                --                 --     lineLength = 120,  -- Line length to pass to ruff checking and formatting
+                --                 --     exclude = { "__about__.py" },  -- Files to be excluded by ruff checking
+                --                 --     select = { "F" },  -- Rules to be enabled by ruff
+                --                 --     ignore = { "D210" },  -- Rules to be ignored by ruff
+                --                 --     perFileIgnores = { ["__init__.py"] = "CPY001" },  -- Rules that should be ignored for specific files
+                --                 --     preview = false,  -- Whether to enable the preview style linting and formatting.
+                --                 --     targetVersion = "py310",  -- The minimum python version to target (applies for both linting and formatting).
+                --                 -- },
+                --             },
+                --         },
+                --     },
+                -- },
             }
 
             require("mason").setup()
@@ -198,22 +210,8 @@ return {
                         local server = servers[server_name] or {}
                         server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
                         server.on_attach = on_attach
-
-                        -- NVIM 0.11 / DEPRECATION FIX
                         local lspconfig = require("lspconfig")
-
-                        if lspconfig[server_name] then
-                            lspconfig[server_name].setup(server)
-                        else
-                            -- Якщо Mason дав назву, яку lspconfig не знає (рідкісний випадок),
-                            -- або якщо ми на чистому 0.11 без плагіна lspconfig (майбутнє)
-                            if vim.fn.has("nvim-0.11") == 1 then
-                                vim.lsp.config[server_name] = server
-                                vim.lsp.enable(server_name)
-                            else
-                                vim.notify("LSP: Server " .. server_name .. " cannot be setup (not found in lspconfig)", vim.log.levels.WARN)
-                            end
-                        end
+                        lspconfig[server_name].setup(server)
                     end,
                 },
             })
