@@ -14,207 +14,310 @@ return {
     {
         "neovim/nvim-lspconfig",
         dependencies = {
-            { "mason-org/mason.nvim", config = true },
+            { 'mason-org/mason.nvim', opts = {} },
             "mason-org/mason-lspconfig.nvim",
+
+            {
+                'mason-org/mason-lspconfig.nvim',
+                opts = {
+                    automatic_enable = false,
+                    ensure_installed = {
+                        'lua_ls',
+                        'bashls',
+                        'cssls',
+                        'html',
+                        'ruff',
+                        'pylsp',
+                        'texlab',
+                        'dotls',
+                        'yamlls',
+                        'clangd',
+                    },
+                },
+            },
             "WhoIsSethDaniel/mason-tool-installer.nvim",
+            {
+                'WhoIsSethDaniel/mason-tool-installer.nvim',
+                opts = {
+                    ensure_installed = {
+                        "shfmt",
+                        "stylua",
+                        -- "debugpy",
+                        -- "isort",
+                        -- "black",
+                        -- "mypy",
+                        -- "flake8",
+                        -- "pylint",
+                        'tree-sitter-cli',
+                        'jupytext',
+                    },
+                },
+            },
             { "j-hui/fidget.nvim", opts = {} },
             "saghen/blink.cmp",
         },
         config = function()
-            local original_capabilities = vim.lsp.protocol.make_client_capabilities()
-            local capabilities = require("blink.cmp").get_lsp_capabilities(original_capabilities)
-            local on_attach = function(_, bufnr)
-                local map = function(keys, func, desc, mode)
-                    mode = mode or "n"
-                    vim.keymap.set(mode, keys, func, { buffer = bufnr, desc = "LSP: " .. desc })
-                end
-                map("K", vim.lsp.buf.hover, "Hover")
+            local util = require 'lspconfig.util'
 
-                -- Rename the variable under your cursor.
-                --  Most Language Servers support renaming across files, etc.
-                map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
+            vim.api.nvim_create_autocmd('LspAttach', {
+                group = vim.api.nvim_create_augroup('lsp-attach', { clear = true }),
+                callback = function(event)
+                    local map = function(keys, func, desc, mode)
+                        mode = mode or "n"
+                        vim.keymap.set(mode, keys, func, { buffer = bufnr, desc = "LSP: " .. desc })
+                    end
 
-                -- Execute a code action, usually your cursor needs to be on top of an error
-                -- or a suggestion from your LSP for this to activate.
-                map("<leader>gca", vim.lsp.buf.code_action, "[G]oto [C]ode [A]ction", { "n", "x" })
+                    local client = vim.lsp.get_client_by_id(event.data.client_id)
+                    assert(client, 'LSP client not found')
 
-                -- Find references for the word under your cursor.
-                map("<leader>gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
+                    ---@diagnostic disable-next-line: inject-field
+                    client.server_capabilities.document_formatting = true
 
-                -- Jump to the implementation of the word under your cursor.
-                --  Useful when your language has ways of declaring types without an actual implementation.
-                map("<leader>gi", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
+                    map("K", vim.lsp.buf.hover, "Hover")
+                    map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
+                    map("<leader>gca", vim.lsp.buf.code_action, "[G]oto [C]ode [A]ction", { "n", "x" })
+                    map("<leader>gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
+                    map("<leader>gi", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
+                    map("<leader>gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
+                    map("<leader>gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+                    map("<leader>gO", require("telescope.builtin").lsp_document_symbols, "Open Document Symbols")
+                    map("<leader>gW", require("telescope.builtin").lsp_dynamic_workspace_symbols, "Open Workspace Symbols")
+                    map("<leader>gtd", require("telescope.builtin").lsp_type_definitions, "[G]oto [T]ype [D]efinition")
+                end,
+            })
 
-                -- Jump to the definition of the word under your cursor.
-                --  This is where a variable was first declared, or where a function is defined, etc.
-                --  To jump back, press <C-t>.
-                map("<leader>gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
-
-                -- WARN: This is not Goto Definition, this is Goto Declaration.
-                --  For example, in C this would take you to the header.
-                map("<leader>gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-
-                -- Fuzzy find all the symbols in your current document.
-                --  Symbols are things like variables, functions, types, etc.
-                map("<leader>gO", require("telescope.builtin").lsp_document_symbols, "Open Document Symbols")
-
-                -- Fuzzy find all the symbols in your current workspace.
-                --  Similar to document symbols, except searches over your entire project.
-                map("<leader>gW", require("telescope.builtin").lsp_dynamic_workspace_symbols, "Open Workspace Symbols")
-
-                -- Jump to the type of the word under your cursor.
-                --  Useful when you're not sure what type a variable is and you want to see
-                --  the definition of its *type*, not where it was *defined*.
-                map("<leader>gtd", require("telescope.builtin").lsp_type_definitions, "[G]oto [T]ype [D]efinition")
-            end
-
-
-            -- Enable the following language servers
-            --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
-            --
-            --  Add any additional override configuration in the following tables. Available keys are:
-            --  - cmd (table): Override the default command used to start the server
-            --  - filetypes (table): Override the default list of associated filetypes for the server
-            --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
-            --  - settings (table): Override the default settings passed when initializing the server.
-            --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
-            local servers = {
-                clangd = {
-                    on_attach = on_attach,
-                    capabilities = capabilities,
-                },
-                lua_ls = {
-                    on_attach = on_attach,
-                    capabilities = capabilities,
-                    settings = {
-                        Lua = {
-                            completion = { callSnippet = "Replace" },
-                            diagnostics = { globals = { "vim" } },
-                        },
-                    },
-                },
-                ruff = {
-                    on_attach = on_attach,
-                    capabilities = capabilities,
-                    init_options = {
-                        settings = {
-                            configurationPreference = "filesystemFirst",
-                            lineLength = 120,  -- Line length to pass to ruff checking and formatting exclude = { "__about__.py", ".venv" },  -- Files to be excluded by ruff checking ignore = { "D210" },  -- Rules to be ignored by ruff
-                            perFileIgnores = { ["__init__.py"] = "CPY001" },  -- Rules that should be ignored for specific files
-                            organizeImports = true,
-                            showSyntaxErrors = true,
-                            lint = {
-                                enable = true,
-                                select = { "F" },  -- Rules to be enabled by ruff
-                                unfixable = {"F401"},
-                                extendSelect = {"TID251"},
-                            },
-                            format = {
-                                backend = "internal",
-                            },
-                        },
-                    },
-                },
-                pyright = {
-                    settings = {
-                        pyright = {
-                            -- Using other import organizer
-                            disableOrganizeImports = true,
-                        },
-                        python = {
-                            analysis = {
-                                -- Ignore all files for analysis to exclusively use other instruments for linting
-                                ignore = { "*" },
-                            },
-                        },
-                    },
-                },
-                -- pylsp = {
-                --     -- cmd = { "pylsp" },
-                --     -- logs for debugging
-                --     cmd = {"pylsp", "-vvv", "--log-file", "/tmp/lsp.log"},
-                --     on_attach = on_attach,
-                --     capabilities = capabilities,
-                --     settings = {
-                --         pylsp = {
-                --             plugins = {
-                --                 -- Disabling all formatting and linting tools
-                --                 pyflakes = { enabled = false },
-                --                 pycodestyle = { enabled = false },
-                --                 autopep8 = { enabled = false },
-                --                 yapf = { enabled = false },
-                --                 pylsp_mypy = { enabled = false },
-                --                 pylsp_black = { enabled = false },
-                --                 pylsp_isort = { enabled = false },
-                --                 mccabe = { enabled = false },
-                --                 pydocstyle = { enabled = false },
-                --                 flake8 = { enabled = false },
-                --                 pylint = { enabled = false },
-                --                 -- Keep navigation-related plugins enabled
-                --                 rope_completion = { enabled = true },
-                --                 jedi_completion = { enabled = true },
-                --                 jedi_definition = { enabled = true },
-                --                 jedi_hover = { enabled = true },
-                --                 jedi_references = { enabled = true },
-                --                 jedi_signature_help = { enabled = true },
-                --                 jedi_symbols = { enabled = true },
-                --                 -- -- linting/formatting via ruff
-                --                 -- pylsp_ruff = {
-                --                 --     enabled = true,
-                --                 --     configurationPreference = "editorFirst",
-                --                 --     formatEnabled = true,  -- Enable formatting using ruffs formatter
-                --                 --     -- executable = "<path-to-ruff-bin>",  -- Custom path to ruff
-                --                 --     -- config = "<path_to_custom_ruff_toml>",  -- Custom config for ruff to use
-                --                 --     extendSelect = { "I" },  -- Rules that are additionally used by ruff
-                --                 --     extendIgnore = { "C90" },  -- Rules that are additionally ignored by ruff
-                --                 --     format = { "I" },  -- Rules that are marked as fixable by ruff that should be fixed when running textDocument/formatting
-                --                 --     severities = { ["D212"] = "I" },  -- Optional table of rules where a custom severity is desired
-                --                 --     unsafeFixes = false,  -- Whether or not to offer unsafe fixes as code actions. Ignored with the "Fix All" action
-                --                 --     unfixable = { "F401" }, -- Rules that are excluded when checking the code actions (including the "Fix All" action)
-                --                 --     -- Rules that are ignored when a pyproject.toml or ruff.toml is present:
-                --                 --     lineLength = 120,  -- Line length to pass to ruff checking and formatting
-                --                 --     exclude = { "__about__.py" },  -- Files to be excluded by ruff checking
-                --                 --     select = { "F" },  -- Rules to be enabled by ruff
-                --                 --     ignore = { "D210" },  -- Rules to be ignored by ruff
-                --                 --     perFileIgnores = { ["__init__.py"] = "CPY001" },  -- Rules that should be ignored for specific files
-                --                 --     preview = false,  -- Whether to enable the preview style linting and formatting.
-                --                 --     targetVersion = "py310",  -- The minimum python version to target (applies for both linting and formatting).
-                --                 -- },
-                --             },
-                --         },
-                --     },
-                -- },
+            local lsp_flags = {
+                allow_incremental_sync = true,
+                debounce_text_changes = 150,
             }
 
-            require("mason").setup()
+            local capabilities
+            local has_blink, blink = pcall(require, 'blink')
+            if has_blink then
+                capabilities = blink.get_lsp_capabilities({}, true)
+            else
+                capabilities = vim.lsp.protocol.make_client_capabilities()
+            end
 
-            local ensure_installed = vim.tbl_keys(servers or {})
-            vim.list_extend(ensure_installed, {
-                "shfmt",
-                "stylua",
-                "debugpy",
-                -- "isort",
-                -- "black",
-                -- "mypy",
-                -- "flake8",
-                -- "pylint",
+            -- set defaults for all clients
+            vim.lsp.config('*', {
+                capabilities = capabilities,
+                flags = lsp_flags,
+                root_markers = { '.git/' },
             })
 
-            require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
+            -- also needs:
+            -- $home/.config/marksman/config.toml :
+            -- [core]
+            -- markdown.file_extensions = ["md", "markdown", "qmd"]
+            -- vim.lsp.config.marksman = {
+            --   filetypes = { 'markdown', 'quarto' },
+            --   root_dir = util.root_pattern('.git', '.marksman.toml', '_quarto.yml'),
+            -- }
 
-            require("mason-lspconfig").setup({
-                ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-                automatic_installation = false,
-                handlers = {
-                    function(server_name)
-                        local server = servers[server_name] or {}
-                        server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-                        server.on_attach = on_attach
-                        local lspconfig = require("lspconfig")
-                        lspconfig[server_name].setup(server)
-                    end,
+            vim.lsp.config.yamlls = {
+                settings = {
+                    yaml = {
+                        schemaStore = {
+                            enable = true,
+                            url = '',
+                        },
+                    },
                 },
-            })
+            }
+
+            local function get_quarto_resource_path()
+                local function strsplit(s, delimiter)
+                    local result = {}
+                    for match in (s .. delimiter):gmatch('(.-)' .. delimiter) do
+                        table.insert(result, match)
+                    end
+                    return result
+                end
+
+                local f = assert(io.popen('quarto --paths', 'r'))
+                local s = assert(f:read '*a')
+                f:close()
+                return strsplit(s, '\n')[2]
+            end
+
+            local lua_library_files = vim.api.nvim_get_runtime_file('', true)
+            local lua_plugin_paths = {}
+            local resource_path = get_quarto_resource_path()
+            if resource_path == nil then
+                vim.notify_once 'quarto not found, lua library files not loaded'
+            else
+                table.insert(lua_library_files, resource_path .. '/lua-types')
+                table.insert(lua_plugin_paths, resource_path .. '/lua-plugin/plugin.lua')
+            end
+
+            vim.lsp.config.clangd = {}
+            vim.lsp.config.lua_ls = {
+                settings = {
+                    Lua = {
+                        completion = { callSnippet = "Replace" },
+                        diagnostics = { globals = { "vim" } },
+                    },
+                },
+            }
+
+            vim.lsp.config.ruff = {
+                init_options = {
+                    settings = {
+                        configurationPreference = "filesystemFirst",
+                        lineLength = 120,  -- Line length to pass to ruff checking and formatting exclude = { "__about__.py", ".venv" },  -- Files to be excluded by ruff checking ignore = { "D210" },  -- Rules to be ignored by ruff
+                        perFileIgnores = { ["__init__.py"] = "CPY001" },  -- Rules that should be ignored for specific files
+                        organizeImports = true,
+                        showSyntaxErrors = true,
+                        lint = {
+                            enable = true,
+                            select = { "F" },  -- Rules to be enabled by ruff
+                            unfixable = {"F401"},
+                            extendSelect = {"TID251"},
+                        },
+                        format = {
+                            backend = "internal",
+                        },
+                    },
+                },
+            }
+
+            vim.lsp.bashls = {
+                filetypes = { 'sh', 'bash' },
+            }
+
+            -- See https://github.com/neovim/neovim/issues/23291
+            -- disable lsp watcher.
+            -- Too lags on linux for python projects
+            -- because pyright and nvim both create too many watchers otherwise
+            if capabilities.workspace == nil then
+                capabilities.workspace = {}
+                capabilities.workspace.didChangeWatchedFiles = {}
+            end
+            capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false
+
+
+            vim.lsp.config.pyright = {
+                capabilities = capabilities,
+                settings = {
+                    python = {
+                        analysis = {
+                            autoSearchPaths = true,
+                            useLibraryCodeForTypes = true,
+                            diagnosticMode = 'workspace',
+                        },
+                    },
+                },
+                root_markers = { '.git', 'setup.py', 'setup.cfg', 'pyproject.toml', 'requirements.txt' },
+            }
+
+            -- vim.lsp.config.pyright = {
+            --     settings = {
+            --         pyright = {
+            --             -- Using other import organizer
+            --             disableOrganizeImports = true,
+            --         },
+            --         python = {
+            --             analysis = {
+            --                 -- Ignore all files for analysis to exclusively use other instruments for linting
+            --                 ignore = { "*" },
+            --             },
+            --         },
+            --     },
+            -- }
+
+            -- vim.lsp.config.ltex = {
+            --     settings = {
+            --         ltex = {
+            --             language = 'en-US',
+            --             markdown = {
+            --                 nodes = {
+            --                     CodeBlock = "ignore",
+            --                     FencedCodeBlock = "ignore",
+            --                 },
+            --             },
+            --             additionalRules = {
+            --                 enablePickyRules = false,
+            --                 motherTongue = 'de-DE',
+            --             },
+            --             disabledRules = {
+            --                 ['en-US'] = { 'FILE_EXTENSIONS_CASE', 'COMMA_PARENTHESIS_WHITESPACE', 'MORFOLOGIK_RULE_EN_US', 'WHITESPACE_RULE', 'UPPERCASE_SENTENCE_START' },
+            --             }
+            --         },
+            --     },
+            -- }
+
+            vim.lsp.config.pylsp = {
+                -- cmd = { "pylsp" },
+                -- logs for debugging
+                cmd = {"pylsp", "-vvv", "--log-file", "/tmp/lsp.log"},
+                settings = {
+                    pylsp = {
+                        plugins = {
+                            -- Disabling all formatting and linting tools
+                            pyflakes = { enabled = false },
+                            pycodestyle = { enabled = false },
+                            autopep8 = { enabled = false },
+                            yapf = { enabled = false },
+                            pylsp_mypy = { enabled = false },
+                            pylsp_black = { enabled = false },
+                            pylsp_isort = { enabled = false },
+                            mccabe = { enabled = false },
+                            pydocstyle = { enabled = false },
+                            flake8 = { enabled = false },
+                            pylint = { enabled = false },
+
+                            -- Keep navigation-related plugins enabled
+                            rope_completion = { enabled = true },
+                            jedi_completion = { enabled = true },
+                            jedi_definition = { enabled = true },
+                            jedi_hover = { enabled = true },
+                            jedi_references = { enabled = true },
+                            jedi_signature_help = { enabled = true },
+                            jedi_symbols = { enabled = true },
+                            -- -- linting/formatting via ruff
+                            -- pylsp_ruff = {
+                            --     enabled = true,
+                            --     configurationPreference = "editorFirst",
+                            --     formatEnabled = true,  -- Enable formatting using ruffs formatter
+                            --     -- executable = "<path-to-ruff-bin>",  -- Custom path to ruff
+                            --     -- config = "<path_to_custom_ruff_toml>",  -- Custom config for ruff to use
+                            --     extendSelect = { "I" },  -- Rules that are additionally used by ruff
+                            --     extendIgnore = { "C90" },  -- Rules that are additionally ignored by ruff
+                            --     format = { "I" },  -- Rules that are marked as fixable by ruff that should be fixed when running textDocument/formatting
+                            --     severities = { ["D212"] = "I" },  -- Optional table of rules where a custom severity is desired
+                            --     unsafeFixes = false,  -- Whether or not to offer unsafe fixes as code actions. Ignored with the "Fix All" action
+                            --     unfixable = { "F401" }, -- Rules that are excluded when checking the code actions (including the "Fix All" action)
+                            --     -- Rules that are ignored when a pyproject.toml or ruff.toml is present:
+                            --     lineLength = 120,  -- Line length to pass to ruff checking and formatting
+                            --     exclude = { "__about__.py" },  -- Files to be excluded by ruff checking
+                            --     select = { "F" },  -- Rules to be enabled by ruff
+                            --     ignore = { "D210" },  -- Rules to be ignored by ruff
+                            --     perFileIgnores = { ["__init__.py"] = "CPY001" },  -- Rules that should be ignored for specific files
+                            --     preview = false,  -- Whether to enable the preview style linting and formatting.
+                            --     targetVersion = "py310",  -- The minimum python version to target (applies for both linting and formatting).
+                            -- },
+                        },
+                    },
+                },
+            }
+
+            -- enable the servers
+            vim.lsp.enable 'cssls'
+            vim.lsp.enable 'html'
+            vim.lsp.enable 'jsonls'
+            vim.lsp.enable 'texlab'
+            vim.lsp.enable 'yamlls'
+            vim.lsp.enable 'clangd'
+            -- vim.lsp.enable 'ltex'
+            -- vim.lsp.enable 'marksman'
+            -- vim.lsp.enable 'julia-lsp'
+            vim.lsp.enable 'lua_ls'
+            vim.lsp.enable 'bashls'
+            -- vim.lsp.enable 'pyright'
+            -- vim.lsp.enable 'ruff'
+            -- vim.lsp.enable 'pylsp'
+
         end,
-    },
+    }
 }
