@@ -64,7 +64,7 @@ return {
                 callback = function(event)
                     local map = function(keys, func, desc, mode)
                         mode = mode or "n"
-                        vim.keymap.set(mode, keys, func, { buffer = bufnr, desc = "LSP: " .. desc })
+                        vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
                     end
 
                     local client = vim.lsp.get_client_by_id(event.data.client_id)
@@ -78,8 +78,11 @@ return {
                     map("<leader>gca", vim.lsp.buf.code_action, "[G]oto [C]ode [A]ction", { "n", "x" })
                     map("<leader>gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
                     map("<leader>gi", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
-                    map("<leader>gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
-                    map("<leader>gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+                    -- map("<leader>gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
+                    map("<leader>gd", vim.lsp.buf.definition, "[G]oto [D]efinition")
+
+                    -- map("<leader>gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+                    map("<leader>gD", vim.lsp.buf.type_definition, "[G]oto [D]eclaration")
                     map("<leader>gO", require("telescope.builtin").lsp_document_symbols, "Open Document Symbols")
                     map("<leader>gW", require("telescope.builtin").lsp_dynamic_workspace_symbols, "Open Workspace Symbols")
                     map("<leader>gtd", require("telescope.builtin").lsp_type_definitions, "[G]oto [T]ype [D]efinition")
@@ -190,15 +193,14 @@ return {
             -- disable lsp watcher.
             -- Too lags on linux for python projects
             -- because pyright and nvim both create too many watchers otherwise
-            if capabilities.workspace == nil then
-                capabilities.workspace = {}
-                capabilities.workspace.didChangeWatchedFiles = {}
-            end
-            capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false
-
+            -- if capabilities.workspace == nil then
+            --     capabilities.workspace = {}
+            --     capabilities.workspace.didChangeWatchedFiles = {}
+            -- end
+            -- capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false
 
             vim.lsp.config.pyright = {
-                capabilities = capabilities,
+                -- capabilities = capabilities,
                 settings = {
                     python = {
                         analysis = {
@@ -314,8 +316,8 @@ return {
             -- vim.lsp.enable 'julia-lsp'
             vim.lsp.enable 'lua_ls'
             vim.lsp.enable 'bashls'
-            -- vim.lsp.enable 'pyright'
-            -- vim.lsp.enable 'ruff'
+            vim.lsp.enable 'pyright'
+            vim.lsp.enable 'ruff'
             -- vim.lsp.enable 'pylsp'
 
         end,
