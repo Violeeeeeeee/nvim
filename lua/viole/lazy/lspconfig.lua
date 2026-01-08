@@ -75,17 +75,12 @@ return {
 
                     map("K", vim.lsp.buf.hover, "Hover")
                     map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
-                    map("<leader>gca", vim.lsp.buf.code_action, "[G]oto [C]ode [A]ction", { "n", "x" })
-                    map("<leader>gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
-                    map("<leader>gi", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
-                    -- map("<leader>gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
-                    map("<leader>gd", vim.lsp.buf.definition, "[G]oto [D]efinition")
-
-                    -- map("<leader>gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-                    map("<leader>gD", vim.lsp.buf.type_definition, "[G]oto [D]eclaration")
-                    map("<leader>gO", require("telescope.builtin").lsp_document_symbols, "Open Document Symbols")
-                    map("<leader>gW", require("telescope.builtin").lsp_dynamic_workspace_symbols, "Open Workspace Symbols")
-                    map("<leader>gtd", require("telescope.builtin").lsp_type_definitions, "[G]oto [T]ype [D]efinition")
+                    -- map("<leader>gca", vim.lsp.buf.code_action, "[G]oto [C]ode [A]ction", { "n", "x" })
+                    -- map("<leader>gr", vim.lsp.buf.references, "[G]oto [R]eferences")
+                    -- map("<leader>gi", vim.lsp.buf.implementation, "[G]oto [I]mplementation")
+                    map("<leader>gd", vim.lsp.buf.definition, "goto definition")
+                    -- map("<leader>gtd", vim.lsp.buf.declaration, "goto declaration")
+                    map("<leader>gD", vim.lsp.buf.type_definition, "goto type definition")
                 end,
             })
 
@@ -169,14 +164,10 @@ return {
                     settings = {
                         configurationPreference = "filesystemFirst",
                         lineLength = 120,  -- Line length to pass to ruff checking and formatting exclude = { "__about__.py", ".venv" },  -- Files to be excluded by ruff checking ignore = { "D210" },  -- Rules to be ignored by ruff
-                        perFileIgnores = { ["__init__.py"] = "CPY001" },  -- Rules that should be ignored for specific files
                         organizeImports = true,
                         showSyntaxErrors = true,
                         lint = {
                             enable = true,
-                            select = { "F" },  -- Rules to be enabled by ruff
-                            unfixable = {"F401"},
-                            extendSelect = {"TID251"},
                         },
                         format = {
                             backend = "internal",
@@ -257,17 +248,17 @@ return {
                     pylsp = {
                         plugins = {
                             -- Disabling all formatting and linting tools
-                            pyflakes = { enabled = false },
-                            pycodestyle = { enabled = false },
                             autopep8 = { enabled = false },
+                            flake8 = { enabled = false },
+                            mccabe = { enabled = false },
+                            pycodestyle = { enabled = false },
+                            pydocstyle = { enabled = false },
+                            pyflakes = { enabled = false },
+                            pylint = { enabled = false },
                             yapf = { enabled = false },
                             pylsp_mypy = { enabled = false },
                             pylsp_black = { enabled = false },
                             pylsp_isort = { enabled = false },
-                            mccabe = { enabled = false },
-                            pydocstyle = { enabled = false },
-                            flake8 = { enabled = false },
-                            pylint = { enabled = false },
 
                             -- Keep navigation-related plugins enabled
                             rope_completion = { enabled = true },
@@ -277,6 +268,8 @@ return {
                             jedi_references = { enabled = true },
                             jedi_signature_help = { enabled = true },
                             jedi_symbols = { enabled = true },
+                            jedi_type_definition = { enabled = true },
+
                             -- -- linting/formatting via ruff
                             -- pylsp_ruff = {
                             --     enabled = true,
@@ -316,9 +309,9 @@ return {
             -- vim.lsp.enable 'julia-lsp'
             vim.lsp.enable 'lua_ls'
             vim.lsp.enable 'bashls'
-            vim.lsp.enable 'pyright'
+            -- vim.lsp.enable 'pyright'
             vim.lsp.enable 'ruff'
-            -- vim.lsp.enable 'pylsp'
+            vim.lsp.enable 'pylsp'
 
         end,
     }
