@@ -26,12 +26,13 @@ return {
                         'bashls',
                         'cssls',
                         'html',
-                        'ruff',
+                        -- 'ruff',
                         'pylsp',
                         'texlab',
                         'dotls',
                         'yamlls',
                         'clangd',
+                        'pyright',
                     },
                 },
             },
@@ -308,8 +309,8 @@ return {
             -- vim.lsp.enable 'julia-lsp'
             vim.lsp.enable 'lua_ls'
             vim.lsp.enable 'bashls'
-            -- vim.lsp.enable 'pyright'
-            vim.lsp.enable 'ruff'
+            vim.lsp.enable 'pyright'
+            -- vim.lsp.enable 'ruff'
             vim.lsp.enable 'pylsp'
 
         end,
