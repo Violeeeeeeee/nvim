@@ -11,8 +11,7 @@ return {
         ---@type OtterConfig
         opts = {},
     },
-    {
-        "neovim/nvim-lspconfig",
+    { "neovim/nvim-lspconfig",
         dependencies = {
             { 'mason-org/mason.nvim', opts = {} },
             "mason-org/mason-lspconfig.nvim",
@@ -26,13 +25,13 @@ return {
                         'bashls',
                         'cssls',
                         'html',
-                        -- 'ruff',
+                        'ruff',
                         'pylsp',
                         'texlab',
                         'dotls',
                         'yamlls',
                         'clangd',
-                        'pyright',
+                        -- 'pyright',
                     },
                 },
             },
@@ -56,9 +55,8 @@ return {
             { "j-hui/fidget.nvim", opts = {} },
             "saghen/blink.cmp",
         },
-        config = function()
-            local util = require 'lspconfig.util'
 
+        config = function()
             vim.api.nvim_create_autocmd('LspAttach', {
                 group = vim.api.nvim_create_augroup('lsp-attach', { clear = true }),
                 callback = function(event)
@@ -69,9 +67,6 @@ return {
 
                     local client = vim.lsp.get_client_by_id(event.data.client_id)
                     assert(client, 'LSP client not found')
-
-                    ---@diagnostic disable-next-line: inject-field
-                    client.server_capabilities.document_formatting = true
 
                     map("K", vim.lsp.buf.hover, "Hover")
                     map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
@@ -84,9 +79,24 @@ return {
                 end,
             })
 
+            vim.api.nvim_create_autocmd("LspAttach", {
+                group = vim.api.nvim_create_augroup('lsp_attach_disable_ruff_hover', { clear = true }),
+                callback = function(args)
+                    local client = vim.lsp.get_client_by_id(args.data.client_id)
+                    if client == nil then
+                        return
+                    end
+                    if client.name == 'ruff' then
+                        -- Disable hover in favor of Pyright
+                        client.server_capabilities.hoverProvider = false
+                    end
+                end,
+                desc = 'LSP: Disable hover capability from Ruff',
+            })
             local lsp_flags = {
                 allow_incremental_sync = true,
                 debounce_text_changes = 150,
+                offset_encoding = 'utf-16'
             }
 
             local capabilities
@@ -309,8 +319,8 @@ return {
             -- vim.lsp.enable 'julia-lsp'
             vim.lsp.enable 'lua_ls'
             vim.lsp.enable 'bashls'
-            vim.lsp.enable 'pyright'
-            -- vim.lsp.enable 'ruff'
+            -- vim.lsp.enable 'pyright'
+            vim.lsp.enable 'ruff'
             vim.lsp.enable 'pylsp'
 
         end,
