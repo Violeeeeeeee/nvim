@@ -4,6 +4,7 @@ return {
         -- optional: provides snippets for the snippet source
         dependencies = {
             "rafamadriz/friendly-snippets",
+            { 'jmbuhr/cmp-pandoc-references', ft = { 'quarto', 'markdown' } },
         },
 
         -- use a release tag to download pre-built binaries
@@ -34,20 +35,29 @@ return {
             },
 
             appearance = {
+                use_nvim_cmp_as_default = true,
                 -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
                 -- Adjusts spacing to ensure icons are aligned
                 nerd_font_variant = "mono",
             },
 
             -- (Default) Only show the documentation popup when manually triggered
-            completion = { documentation = { auto_show = true } },
+            completion = {
+                documentation = { auto_show = true },
+                menu = { auto_show = true },
+            },
             signature = { enabled = true },
 
             -- Default list of enabled providers defined so that you can extend it
             -- elsewhere in your config, without redefining it, due to `opts_extend`
             sources = {
-                default = { "lsp", "path", "snippets", "buffer" },
+                default = { "lsp", "path", "snippets", "buffer", "pandoc_references" },
                 providers = {
+                    pandoc_references = {
+                        name = 'pandoc_references',
+                        module = 'cmp-pandoc-references.blink',
+                        score_offset = 10,
+                    },
                 },
             },
 
