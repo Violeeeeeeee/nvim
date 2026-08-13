@@ -62,11 +62,14 @@ return {
             vim.keymap.set("n", "<leader>rc", function() run_in_pane("1") end, { desc = "[R]un [C]ell in Pane 1 (Calc)", silent = true })
             vim.keymap.set("n", "<leader>rp", function() run_in_pane("2") end, { desc = "[R]un [P]lot in Pane 2 (Plots)", silent = true })
             -- Smart Execute (Ctrl+Enter)
-            vim.keymap.set("n", "<C-CR>", smart_send, { desc = "Run Cell (Smart)", silent = true })
+            -- vim.keymap.set("n", "<C-CR>", smart_send, { desc = "Run Cell (Smart)", silent = true })
             vim.keymap.set("i", "<C-CR>", smart_send, { desc = "Run Cell (Smart)", silent = true })
             -- Molten Specific Actions (поки ви розбираєтесь)
             vim.keymap.set("n", "<leader>mi", ":MoltenInit<cr>", { desc = "[M]olten [I]nit" })
-            vim.keymap.set("n", "<leader>mr", ":MoltenReevaluateCell<cr>", { desc = "[M]olten [R]un Cell" })
+            vim.keymap.set("n", "<leader>mer", ":MoltenReevaluateCell<cr>", { desc = "[M]olten [R]un Cell" })
+            vim.keymap.set("n", "<leader>mr", ":MoltenEvaluateOperator<cr>", { desc = "Run Cell" })
+            vim.keymap.set("n", "<leader>ml", ":MoltenEvaluateLine<cr>", { desc = "Run Cell" })
+
             vim.keymap.set("n", "<leader>md", ":MoltenDelete<cr>", { desc = "[M]olten [D]elete Cell" })
             vim.keymap.set("n", "<leader>mh", ":MoltenHideOutput<cr>", { desc = "[M]olten [H]ide Output" })
             -- Інше

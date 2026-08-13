@@ -2,8 +2,6 @@ vim.keymap.set("n", "<leader>cc", vim.cmd.Ex)
 
 vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
 
-vim.keymap.set("n", "<leader>Y", [["+Y]])
-
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
