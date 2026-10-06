@@ -16,42 +16,45 @@ return {
         },
         config = function()
             -- Main setup for Treesitter AND its extensions
-            require("nvim-treesitter.configs").setup({
-                ensure_installed = {
-                    "bash", "c", "diff", "lua", "luadoc", "markdown",
-                    "markdown_inline", "query", "vim", "vimdoc", "python",
-                    "julia", "yaml", "html", "css", "dot", "mermaid",
-                },
+            require("nvim-treesitter").setup({
                 textobjects = {
                     select = {
                         enable = true,
                         lookahead = true,
                         keymaps = {
                             -- Jupyter cells / Markdown code blocks
-                            ["ib"] = { query = "@code_cell.inner", desc = "in block" },
-                            ["ab"] = { query = "@code_cell.outer", desc = "around block" },
+                            ["ic"] = { query = "@code_cell.inner", desc = "in block" },
+                            ["ac"] = { query = "@code_cell.outer", desc = "around block" },
                             -- Functions and classes
-                            ["im"] = { query = "@function.inner", desc = "in function" },
-                            ["am"] = { query = "@function.outer", desc = "around function" },
-                            ["ic"] = { query = "@class.inner", desc = "in class" },
-                            ["ac"] = { query = "@class.outer", desc = "around class" },
+                            -- ["im"] = { query = "@function.inner", desc = "in function" },
+                            -- ["am"] = { query = "@function.outer", desc = "around function" },
+                            -- ["ic"] = { query = "@class.inner", desc = "in class" },
+                            -- ["ac"] = { query = "@class.outer", desc = "around class" },
                         },
                     },
                     move = {
                         enable = true,
                         set_jumps = false, -- keeps jumplist clean
                         goto_next_start = {
-                            ["]b"] = { query = "@code_cell.inner", desc = "next code block" },
-                            ["]m"] = { query = "@function.outer", desc = "next function" },
+                            ["]c"] = { query = "@code_cell.inner", desc = "next code block" },
+                            -- ["]m"] = { query = "@function.outer", desc = "next function" },
                             ["]]"] = { query = "@class.inner", desc = "next class" },
                         },
                         goto_previous_start = {
-                            ["[b"] = { query = "@code_cell.inner", desc = "previous code block" },
-                            ["[m"] = { query = "@function.outer", desc = "prev function" },
+                            ["[c"] = { query = "@code_cell.inner", desc = "previous code block" },
+                            -- ["[m"] = { query = "@function.outer", desc = "prev function" },
                             ["[["] = { query = "@class.inner", desc = "prev class" },
                         },
                     },
                 },
+            })
+
+            require("nvim-treesitter").setup({})
+
+            require("nvim-treesitter").install({
+                    "bash", "c", "diff", "lua", "luadoc", "markdown",
+                    "markdown_inline", "query", "vim", "vimdoc", "python",
+                    "julia", "yaml", "html", "css", "dot", "mermaid",
             })
         end,
     },

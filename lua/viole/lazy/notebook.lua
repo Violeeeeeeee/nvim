@@ -19,15 +19,14 @@ return {
                 invoke_on_body = true,
                 hint = {
                     position = "bottom",
-                    border = "rounded",
                 },
             },
             mode = "n",
             -- Entry point for the Hydra mode. Change "<localleader>n" to your preferred keymap.
             body = "<localleader>n",
             heads = {
-                { "j", "]b", { desc = "next cell" } },
-                { "k", "[b", { desc = "previous cell" } },
+                { "j", "]c", { desc = "next cell" } },
+                { "k", "[c", { desc = "previous cell" } },
                 -- Code execution via Quarto runner
                 { "r", runner.run_cell, { desc = "run cell" } },
                 { "R", runner.run_above, { desc = "run cell and above" } },

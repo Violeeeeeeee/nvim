@@ -1,8 +1,5 @@
 ;extends
-
 (
-(comment) @content1
-(#match? @content1 "^\\# ?\\%\\%") 
-) @class.inner
-
-
+    (comment) @_c
+    (#match? @_c "^#\\s*%%")
+) @code_cell.inner @code_cell.outer

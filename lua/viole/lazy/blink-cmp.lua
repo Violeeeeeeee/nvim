@@ -4,6 +4,7 @@ return {
         -- optional: provides snippets for the snippet source
         dependencies = {
             "rafamadriz/friendly-snippets",
+            { "saghen/blink.compat", opts = {} },
             { 'jmbuhr/cmp-pandoc-references', ft = { 'quarto', 'markdown' } },
         },
 
