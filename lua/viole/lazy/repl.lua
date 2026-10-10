@@ -4,7 +4,8 @@ return {
         version = "^1.0.0",
         build = ":UpdateRemotePlugins",
         dependencies = { "3rd/image.nvim" },
-        ft = { "python", "markdown", "quarto" }, 
+        ft = { "python", "markdown", "quarto" },
+
         init = function()
             vim.g.molten_auto_open_output = false
             vim.g.molten_image_location = "float"
@@ -35,7 +36,7 @@ return {
                 pattern = "MoltenInitPost",
                 callback = function()
                     local r = require("quarto.runner")
-                    
+
                     -- quarto code runner mappings
                     vim.keymap.set("n", "<S-CR>", r.run_cell, { desc = "Run Cell and Step", silent = true })
                     vim.keymap.set("n", "<leader>rc", r.run_cell, { desc = "[R]un [C]ell", silent = true })
@@ -50,7 +51,7 @@ return {
                     vim.keymap.set("n", "<leader>mo", ":noautocmd MoltenEnterOutput<CR>", { desc = "open output window", silent = true })
                     vim.keymap.set("n", "<leader>mh", ":MoltenHideOutput<CR>", { desc = "close output window", silent = true })
                     vim.keymap.set("n", "<leader>md", ":MoltenDelete<CR>", { desc = "delete Molten cell", silent = true })
-                    
+
                     -- Перемикач автоматичного відкриття вікна виводу
                     local open = false
                     vim.keymap.set("n", "<leader>ot", function()
