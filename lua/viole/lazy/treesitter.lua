@@ -48,6 +48,14 @@ return {
                     end)
 
                     -- move
+                    vim.keymap.set({ "n", "x", "o" }, "]b", function()
+                        require("nvim-treesitter-textobjects.move").goto_next_start("@code_cell.inner", "textobjects")
+                    end, { desc = "next code block" })
+
+                    vim.keymap.set({ "n", "x", "o" }, "[b", function()
+                        require("nvim-treesitter-textobjects.move").goto_previous_start("@code_cell.inner", "textobjects")
+                    end, { desc = "previous code block" })
+
                     vim.keymap.set({ "n", "x", "o" }, "]m", function()
                         require("nvim-treesitter-textobjects.move").goto_next_start("@function.outer", "textobjects")
                     end)
@@ -91,7 +99,6 @@ return {
         },
         config = function()
 
-            require("nvim-treesitter").setup({})
             require("nvim-treesitter").install({
                 "bash",
                 "c",

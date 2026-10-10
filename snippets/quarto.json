@@ -14,5 +14,14 @@
       "$0",
       "```"
     ]
+  },
+  "Quarto Code Cell": {
+    "prefix": ["cc", "cell"],
+    "body": [
+      "```{${1:python}}",
+      "$0",
+      "```"
+    ],
+    "description": "Insert Quarto code cell"
   }
 }
