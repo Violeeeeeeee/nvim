@@ -55,6 +55,8 @@ return {
             -- to create a cell in insert mode, I have the ` snippet
             -- vim.keymap.set("n", "<localleader>cc", "i`<c-j>", { desc = "Create a new code cell", silent = true })
             vim.keymap.set("n", "<localleader>cs", "i```\r\r```{}<left>", { desc = "Split code cell", silent = true, noremap = true })
+
+            require("viole.notebook")
         end,
     },
 
