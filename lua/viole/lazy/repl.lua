@@ -22,7 +22,7 @@ return {
             vim.keymap.set("n", "<leader>ip", function()
                 local venv = os.getenv("VIRTUAL_ENV")
                 if venv ~= nil then
-                -- in the form of /home/benlubas/.virtualenvs/VENV_NAME
+                -- in the form of /home/viole/.virtualenvs/VENV_NAME
                     venv = string.match(venv, "/.+/(.+)")
                     vim.cmd(("MoltenInit %s"):format(venv))
                 else
@@ -52,7 +52,6 @@ return {
                     vim.keymap.set("n", "<leader>mh", ":MoltenHideOutput<CR>", { desc = "close output window", silent = true })
                     vim.keymap.set("n", "<leader>md", ":MoltenDelete<CR>", { desc = "delete Molten cell", silent = true })
 
-                    -- Перемикач автоматичного відкриття вікна виводу
                     local open = false
                     vim.keymap.set("n", "<leader>ot", function()
                         open = not open
